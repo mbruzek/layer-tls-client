@@ -1,0 +1,12 @@
+name: tls-client
+summary: A simple client to consume the requires and provides tls relation. 
+maintainer: Matthew Bruzek <matthew.bruzek@canonical.com>
+description: |
+  <Multi-line description here>
+tags:
+  - misc
+  - security
+subordinate: false
+requires:
+  certificates:
+    interface: tls
