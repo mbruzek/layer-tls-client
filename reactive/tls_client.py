@@ -20,17 +20,18 @@ def store_ca(tls):
     on this system.'''
     # Get the CA from the relationship object.
     certificate_authority = tls.get_ca()
-    # Update /etc/ssl/certs and generate ca-certificates.crt
-    install_ca(certificate_authority)
+    if certificate_authority:
+        # Update /etc/ssl/certs and generate ca-certificates.crt
+        install_ca(certificate_authority)
 
-    # The final location of the CA should be in /srv/kubernetes directory.
-    kubernetes_dir = '/srv/kubernetes'
-    if not os.path.isdir(kubernetes_dir):
-        os.makedirs(kubernetes_dir)
-    destination = os.path.join(kubernetes_dir, 'ca.crt')
-    hookenv.log('Writing the CA to {0}'.format(destination))
-    with open(destination, 'w') as fp:
-        fp.write(certificate_authority)
+        # The final location of the CA should be in /srv/kubernetes directory.
+        kubernetes_dir = '/srv/kubernetes'
+        if not os.path.isdir(kubernetes_dir):
+            os.makedirs(kubernetes_dir)
+        destination = os.path.join(kubernetes_dir, 'ca.crt')
+        hookenv.log('Writing the CA to {0}'.format(destination))
+        with open(destination, 'w') as fp:
+            fp.write(certificate_authority)
 
 
 @when('certificates.available')
@@ -54,17 +55,18 @@ def store_server(tls):
     '''Read the server certificate from the relation object and install it on
     this system.'''
     server_cert, server_key = tls.get_server_cert()
-    kubernetes_dir = '/srv/kubernetes'
-    if not os.path.isdir(kubernetes_dir):
-        os.makedirs(kubernetes_dir)
-    cert_file = os.path.join(kubernetes_dir, 'server.cert')
-    hookenv.log('Writing the server certificate to {0}'.format(cert_file))
-    with open(cert_file, 'w') as stream:
-        stream.write(server_cert)
-    key_file = os.path.join(kubernetes_dir, 'server.key')
-    hookenv.log('Writing the server key to {0}'.format(key_file))
-    with open(key_file, 'w') as stream:
-        stream.write(server_key)
+    if server_cert and server_key:
+        kubernetes_dir = '/srv/kubernetes'
+        if not os.path.isdir(kubernetes_dir):
+            os.makedirs(kubernetes_dir)
+        cert_file = os.path.join(kubernetes_dir, 'server.cert')
+        hookenv.log('Writing the server certificate to {0}'.format(cert_file))
+        with open(cert_file, 'w') as stream:
+            stream.write(server_cert)
+        key_file = os.path.join(kubernetes_dir, 'server.key')
+        hookenv.log('Writing the server key to {0}'.format(key_file))
+        with open(key_file, 'w') as stream:
+            stream.write(server_key)
 
 
 @when('certificates.client.cert.available')
@@ -72,17 +74,18 @@ def store_client(tls):
     '''Read the client certificate from the relation object and install it on
     this system.'''
     client_cert, client_key = tls.get_client_cert()
-    kubernetes_dir = '/srv/kubernetes'
-    if not os.path.isdir(kubernetes_dir):
-        os.makedirs(kubernetes_dir)
-    cert_file = os.path.join(kubernetes_dir, 'client.cert')
-    hookenv.log('Writing the server certificate to {0}'.format(cert_file))
-    with open(cert_file, 'w') as stream:
-        stream.write(client_cert)
-    key_file = os.path.join(kubernetes_dir, 'client.key')
-    hookenv.log('Writing the server key to {0}'.format(key_file))
-    with open(key_file, 'w') as stream:
-        stream.write(client_key)
+    if client_cert and client_key:
+        kubernetes_dir = '/srv/kubernetes'
+        if not os.path.isdir(kubernetes_dir):
+            os.makedirs(kubernetes_dir)
+        cert_file = os.path.join(kubernetes_dir, 'client.cert')
+        hookenv.log('Writing the server certificate to {0}'.format(cert_file))
+        with open(cert_file, 'w') as stream:
+            stream.write(client_cert)
+        key_file = os.path.join(kubernetes_dir, 'client.key')
+        hookenv.log('Writing the server key to {0}'.format(key_file))
+        with open(key_file, 'w') as stream:
+            stream.write(client_key)
 
 
 def install_ca(certificate_authority):

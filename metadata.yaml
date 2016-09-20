@@ -9,4 +9,4 @@ tags:
 subordinate: false
 requires:
   certificates:
-    interface: tls
+    interface: tls-certificates
